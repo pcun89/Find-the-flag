@@ -9,3 +9,14 @@ import matplotlib.pyplot as plt
 def load_data(filepath):
     """Loads flag dataset from a CSV file."""
     return pd.read_csv(filepath)
+
+
+def preprocess_data(df):
+    """Encodes categorical target and prepares features and labels."""
+    label_encoder = LabelEncoder()
+    df['continent_encoded'] = label_encoder.fit_transform(df['continent'])
+
+    X = df.drop(columns=['country', 'continent', 'continent_encoded'])
+    y = df['continent_encoded']
+
+    return train_test_split(X, y, test_size=0.2, random_state=42), label_encoder
