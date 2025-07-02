@@ -20,3 +20,42 @@ def preprocess_data(df):
     y = df['continent_encoded']
 
     return train_test_split(X, y, test_size=0.2, random_state=42), label_encoder
+
+
+def train_decision_tree(X_train, y_train, max_depth=5):
+    """Trains a Decision Tree Classifier."""
+    model = DecisionTreeClassifier(max_depth=max_depth, random_state=42)
+    model.fit(X_train, y_train)
+    return model
+
+
+def evaluate_model(model, X_test, y_test, label_encoder):
+    """Evaluates model performance."""
+    y_pred = model.predict(X_test)
+    print("✅ Accuracy:", accuracy_score(y_test, y_pred))
+    print("✅ Classification Report:\n", classification_report(
+        y_test, y_pred, target_names=label_encoder.classes_))
+
+
+def visualize_tree(model, feature_names, class_names):
+    """Optional: Visualize the decision tree using matplotlib."""
+    plt.figure(figsize=(20, 10))
+    plot_tree(model, feature_names=feature_names,
+              class_names=class_names, filled=True, rounded=True)
+    plt.title("Decision Tree for Flag Classification")
+    plt.show()
+
+
+def main():
+    filepath = "flags.csv"  # Ensure this file exists in your working directory
+    df = load_data(filepath)
+
+    (X_train, X_test, y_train, y_test), label_encoder = preprocess_data(df)
+    model = train_decision_tree(X_train, y_train, max_depth=5)
+
+    evaluate_model(model, X_test, y_test, label_encoder)
+    visualize_tree(model, X_train.columns, label_encoder.classes_)
+
+
+if __name__ == "__main__":
+    main()
