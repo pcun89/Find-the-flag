@@ -5,3 +5,7 @@ from sklearn.metrics import classification_report, accuracy_score
 from sklearn.preprocessing import LabelEncoder
 import matplotlib.pyplot as plt
 
+
+def load_data(filepath):
+    """Loads flag dataset from a CSV file."""
+    return pd.read_csv(filepath)
